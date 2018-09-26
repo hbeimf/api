@@ -1,14 +1,12 @@
-{application, api,
+{application, glib,
  [{description, "An OTP application"},
   {vsn, "0.1.0"},
   {registered, []},
-  {mod, { api_app, []}},
+  {mod, { glib_app, []}},
   {applications,
    [kernel,
     stdlib,
-    glib,
-    zip_helper,
-    webs 
+    esnowflake
    ]},
   {env,[]},
   {modules, []},

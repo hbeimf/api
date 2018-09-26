@@ -1,16 +1,15 @@
-{application, api,
+{application, mysqlc,
  [{description, "An OTP application"},
   {vsn, "0.1.0"},
   {registered, []},
-  {mod, { api_app, []}},
+  {mod, { mysqlc_app, []}},
   {applications,
    [kernel,
     stdlib,
-    glib,
-    zip_helper,
-    webs 
+    sys_config
    ]},
-  {env,[]},
+  {env,[
+  ]},
   {modules, []},
 
   {maintainers, []},

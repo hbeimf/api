@@ -1,16 +1,21 @@
-{application, api,
+{application, redisc,
  [{description, "An OTP application"},
   {vsn, "0.1.0"},
   {registered, []},
-  {mod, { api_app, []}},
+  {mod, { redisc_app, []}},
   {applications,
    [kernel,
     stdlib,
-    glib,
-    zip_helper,
-    webs 
+    poolboy,
+    eredis,
+    sys_config
    ]},
-  {env,[]},
+{env, [
+        {global_or_local, local}
+  ]},
+
+
+
   {modules, []},
 
   {maintainers, []},

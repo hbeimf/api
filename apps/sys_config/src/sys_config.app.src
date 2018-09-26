@@ -1,14 +1,12 @@
-{application, api,
+{application, sys_config,
  [{description, "An OTP application"},
   {vsn, "0.1.0"},
   {registered, []},
-  {mod, { api_app, []}},
+  {mod, { sys_config_app, []}},
   {applications,
    [kernel,
     stdlib,
-    glib,
-    zip_helper,
-    webs 
+    zucchini
    ]},
   {env,[]},
   {modules, []},
