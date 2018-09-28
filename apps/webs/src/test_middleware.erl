@@ -30,5 +30,7 @@ exe(_, Req, Env) ->
 			Data = [{<<"flg">>, false}, {<<"msg">>, Msg}],
 			Json = jsx:encode(Data),
 			cowboy_req:reply(400, [{<<"content-type">>, <<"text/javascript; charset=utf-8">>}], Json, Req),
-			{shutdown, Req, <<"Unauthorization">>}
+			% {shutdown, Req, <<"Unauthorization">>}
+
+			{halt, Req} 
 	end.
