@@ -8,23 +8,8 @@
 -export([terminate/3]).
 
 init(_Transport, Req, []) ->
-	case cowboy_req:parse_header(<<"authorization">>, Req) of 
-		{ok , {_,  Token}, _} -> 
-			% io:format("~p~n", [Token]),
-			Key = <<"supas3cri7">>,
-			R = jwt:decode(Token, Key),
-			io:format("~p~n", [R]),
-
-			{ok, Req, undefined};
-		R ->
-			io:format("~p~n", [R]),
-			Msg = unicode:characters_to_binary("没登录!! "),
-			Data = [{<<"flg">>, false}, {<<"msg">>, Msg}],
-			Json = jsx:encode(Data),
-			cowboy_req:reply(400, [{<<"content-type">>, <<"text/javascript; charset=utf-8">>}], Json, Req),
-			{shutdown, Req, []}
-	end.
-	% {ok, Req, undefined}.
+	io:format("~p~n", [init ]),
+	{ok, Req, undefined}.
 
 handle(Req, State) ->
 	{Method, Req2} = cowboy_req:method(Req),
