@@ -9,6 +9,7 @@
     mysqlc,
     redisc,
     jsx,
+    jwt,
     cowboy
    ]},
   {env,[]},

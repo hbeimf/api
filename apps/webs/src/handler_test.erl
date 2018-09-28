@@ -16,8 +16,23 @@ handle(Req, State) ->
 	{ok, Req4, State}.
 
 reply(<<"GET">>, Req) ->
+
+	Key = <<"supas3cri7">>,
+	Claims = [
+		{user_id, 42},
+		{user_name, <<"Bob">>}
+	],
+	% {ok, Token} = jwt:encode(<<"HS256">>, Claims, Key),
+	% or with expiration
+	ExpirationSeconds = 86400,
+	{ok, Token} = jwt:encode(<<"HS256">>, Claims, ExpirationSeconds, Key),
+	% Parse JWT token
+	% {ok, Claims} = jwt:decode(Token, Key).
+
 	Msg = unicode:characters_to_binary("测试!! "),
-	Data = [{<<"flg">>, false}, {<<"msg">>, Msg}],
+	% Data = [{<<"flg">>, false}, {<<"msg">>, Msg}],
+	Data = [{<<"flg">>, false}, {<<"msg">>, Msg}, {<<"token">>, Token}],
+
 	Json = jsx:encode(Data),
 	cowboy_req:reply(200, [{<<"content-type">>, <<"text/javascript; charset=utf-8">>}], Json, Req);
 	
