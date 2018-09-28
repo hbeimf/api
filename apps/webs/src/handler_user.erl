@@ -1,30 +1,14 @@
 %% Feel free to use, reuse and abuse the code in this file.
 % http://localhost:8088/api/test
 %% @doc GET echo handler.
--module(handler_test).
+-module(handler_user).
 
 -export([init/3]).
 -export([handle/2]).
 -export([terminate/3]).
 
 init(_Transport, Req, []) ->
-	case cowboy_req:parse_header(<<"authorization">>, Req) of 
-		{ok , {_,  Token}, _} -> 
-			% io:format("~p~n", [Token]),
-			Key = <<"supas3cri7">>,
-			R = jwt:decode(Token, Key),
-			io:format("~p~n", [R]),
-
-			{ok, Req, undefined};
-		R ->
-			io:format("~p~n", [R]),
-			Msg = unicode:characters_to_binary("没登录!! "),
-			Data = [{<<"flg">>, false}, {<<"msg">>, Msg}],
-			Json = jsx:encode(Data),
-			cowboy_req:reply(400, [{<<"content-type">>, <<"text/javascript; charset=utf-8">>}], Json, Req),
-			{shutdown, Req, []}
-	end.
-	% {ok, Req, undefined}.
+	{ok, Req, undefined}.
 
 handle(Req, State) ->
 	{Method, Req2} = cowboy_req:method(Req),
