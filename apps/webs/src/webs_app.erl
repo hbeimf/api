@@ -35,7 +35,7 @@ start(_StartType, _StartArgs) ->
             {_, {port, Port}, _} = lists:keytake(port, 1, Config),
 
 	{ok, _} = cowboy:start_http(http, 100, [{port, Port}], 
-		[{env, [{dispatch, Dispatch}]}, {middlewares, [cowboy_router, test_middleware, cowboy_handler]}]),
+		[{env, [{dispatch, Dispatch}]}, {middlewares, [cowboy_router, auth_middleware, cowboy_handler]}]),
 		
     webs_sup:start_link().
 

@@ -1,4 +1,4 @@
--module(test_middleware).
+-module(auth_middleware).
 -behaviour(cowboy_middleware).
 
 -export([execute/2]).
