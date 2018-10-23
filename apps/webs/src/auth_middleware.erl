@@ -15,6 +15,8 @@ execute(Req, Env) ->
 
 exe("/login", Req, Env) -> 
 	{ok, Req, Env};
+exe("/websocket", Req, Env) -> 
+	{ok, Req, Env};
 exe(_, Req, Env) ->
     	case cowboy_req:parse_header(<<"authorization">>, Req) of 
 		{ok , {_,  Token}, _} -> 

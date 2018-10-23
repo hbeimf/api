@@ -19,6 +19,7 @@ start(_StartType, _StartArgs) ->
 		{'_', [
 			{"/login", handler_login, []},
 			{"/api/admin/refresh_token", handler_refresh_token, []},
+			{"/websocket", handler_ws, []},
 			% {"/api/admin/hello", handler_hello, []},
 			{"/api/test", handler_test, []},
 			{"/api/activate", handler_activate, []},
