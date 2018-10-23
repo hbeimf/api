@@ -12,10 +12,10 @@ class Test {
 		$this->refresh();
 	}
 
-	// http -f GET localhost:8000/auth/hello "Authorization:Bearer xxxxxxxxx"  "Content-Type: application/json"
+	// http -f GET localhost:8088/auth/hello "Authorization:Bearer xxxxxxxxx"  "Content-Type: application/json"
 	function hello() {
-		// $url = 'localhost:8000/auth/auth/hello';
-		$url = 'localhost:8000/api/admin/hello';
+		// $url = 'localhost:8088/auth/auth/hello';
+		$url = 'localhost:8088/api/admin/hello';
 
 		$header = [];
 		$header[] = "Content-Type: application/json";
@@ -31,7 +31,7 @@ class Test {
 	}
 
 	function refresh() {
-		$url = 'localhost:8000/api/admin/refresh_token';
+		$url = 'localhost:8088/api/admin/refresh_token';
 
 		$header = [];
 		$header[] = "Content-Type: application/json";
@@ -47,7 +47,7 @@ class Test {
 	}
 
 	function adminLoginByName() {
-		$url = 'localhost:8000/login';
+		$url = 'localhost:8088/login';
 		// username=admin password=admin
 		$post_data['username'] = 'test';
 		$post_data['password'] = 'test';

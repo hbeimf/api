@@ -3,9 +3,9 @@ NODENAME := api
 VERSION := 0.1.0
 
 
-all: release test
+all: release test_release
 	
-test: 
+test_release: 
 	rebar3 compile
 	rebar3 release
 	rebar3 tar
@@ -31,6 +31,9 @@ clean:
 
 run:
 	rebar3 shell --name $(NODENAME)@127.0.0.1 --setcookie $(NODENAME)_cookie 
+
+test:
+	cd ./client_test/wsc && rebar3 shell
 
 # 请先修改app的版本号再执行make up 
 up:
