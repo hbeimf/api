@@ -8,7 +8,7 @@ class Test {
 
 	function run() {
 		$this->adminLoginByName();
-		$this->hello();
+		// $this->hello();
 		$this->refresh();
 	}
 

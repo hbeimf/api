@@ -1,13 +1,14 @@
 %% Feel free to use, reuse and abuse the code in this file.
 % http://localhost:8088/api/test
 %% @doc GET echo handler.
--module(handler_login).
+-module(handler_refresh_token).
 
 -export([init/3]).
 -export([handle/2]).
 -export([terminate/3]).
 
 init(_Transport, Req, []) ->
+	io:format("~p~n", [init ]),
 	{ok, Req, undefined}.
 
 handle(Req, State) ->
@@ -15,7 +16,7 @@ handle(Req, State) ->
 	{ok, Req4} = reply(Method, Req2),
 	{ok, Req4, State}.
 
-reply(<<"POST">>, Req) ->
+reply(<<"GET">>, Req) ->
 
 	Key = <<"supas3cri7">>,
 	Claims = [
@@ -29,7 +30,7 @@ reply(<<"POST">>, Req) ->
 	% Parse JWT token
 	% {ok, Claims} = jwt:decode(Token, Key).
 
-	Msg = unicode:characters_to_binary("测试!! "),
+	Msg = unicode:characters_to_binary("刷新token!! "),
 	% Data = [{<<"flg">>, false}, {<<"msg">>, Msg}],
 	Data = [{<<"flg">>, false}, {<<"msg">>, Msg}, {<<"token">>, Token}],
 

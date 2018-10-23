@@ -15,7 +15,7 @@ handle(Req, State) ->
 	{ok, Req4} = reply(Method, Req2),
 	{ok, Req4, State}.
 
-reply(<<"GET">>, Req) ->
+reply(<<"POST">>, Req) ->
 
 	Key = <<"supas3cri7">>,
 	Claims = [
