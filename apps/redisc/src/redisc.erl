@@ -36,9 +36,37 @@ hset(Hash, Key, Val) ->
     q(["hset", Hash, Key, Val], 3000). 
 
 pub() ->
-    pub('test-channel', msg).
+    pub('test-channel', <<"hello world!!">>).
 pub(Chan, Msg) ->
     q(["PUBLISH", Chan, Msg]).
+
+sub() ->
+    sub(['test-channel']).
+sub(Channels) ->
+    {ok, Sub} = eredis_sub:start_link("127.0.0.1", 6379, ""),
+    spawn(fun() -> 
+        loop(Sub, Channels)
+    end).
+       
+
+loop(Sub, Channels) -> 
+     ok = eredis_sub:controlling_process(Sub),
+    ok = eredis_sub:subscribe(Sub, Channels),
+    lists:foreach(
+      fun (C) ->
+              receive 
+                    {subscribed, _, _} -> 
+                         loop(Sub, Channels);
+                    M ->
+                      % ?assertEqual({subscribed, C, Sub}, M),
+                      io:format("msg:~p~n", [M]),
+                      eredis_sub:ack_message(Sub),
+                      loop(Sub, Channels)
+                    
+              end
+      end, Channels).
+
+
 
 q(Command) -> 
     redisc_call:q(pool_redis, Command).
