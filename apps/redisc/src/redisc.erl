@@ -35,6 +35,11 @@ hgetall(Hash) ->
 hset(Hash, Key, Val) ->
     q(["hset", Hash, Key, Val], 3000). 
 
+pub() ->
+    pub('test-channel', msg).
+pub(Chan, Msg) ->
+    q(["PUBLISH", Chan, Msg]).
+
 q(Command) -> 
     redisc_call:q(pool_redis, Command).
 q(Command, Timeout) -> 
