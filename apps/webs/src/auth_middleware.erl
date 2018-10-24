@@ -3,6 +3,7 @@
 
 -export([execute/2]).
 
+-include("log.hrl").
 % https://www.cnblogs.com/ziyouchutuwenwu/p/4278069.html
 
 %% 这个是回调函数
@@ -23,7 +24,8 @@ exe(_, Req, Env) ->
 			% io:format("~p~n", [Token]),
 			Key = <<"supas3cri7">>,
 			R = jwt:decode(Token, Key),
-			io:format("~p~n", [R]),
+			%io:format("~p~n", [R]),
+			?LOG(R),
 
 			{ok, Req, Env};
 		R ->
