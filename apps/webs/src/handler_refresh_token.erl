@@ -6,6 +6,7 @@
 -export([init/3]).
 -export([handle/2]).
 -export([terminate/3]).
+-include("log.hrl").
 
 init(_Transport, Req, []) ->
 	io:format("~p~n", [init ]),
@@ -34,6 +35,8 @@ reply(<<"GET">>, Req) ->
 	% Data = [{<<"flg">>, false}, {<<"msg">>, Msg}],
 	Data = [{<<"flg">>, false}, {<<"msg">>, Msg}, {<<"token">>, Token}],
 
+	rsa_test(),
+
 	Json = jsx:encode(Data),
 	cowboy_req:reply(200, [{<<"content-type">>, <<"text/javascript; charset=utf-8">>}], Json, Req);
 	
@@ -46,3 +49,53 @@ reply(_, Req) ->
 
 terminate(_Reason, _Req, _State) ->
 	ok.
+
+
+%% rsa test 
+rsa_test() ->
+	test(<<"hello world . hhhhhhhhh!!!">>),
+	ok.
+
+read_rsa_key(FileName) ->
+    {ok, PemBin} = file:read_file(FileName),
+    [Entry] = public_key:pem_decode(PemBin),
+    public_key:pem_entry_decode(Entry).
+
+rsa_public_key() ->
+	PubKeyFile = root_dir() ++ "config/publickey.key",
+    read_rsa_key(PubKeyFile).
+
+rsa_private_key() ->
+	PriKeyFile = root_dir() ++ "config/privatekey.key",
+    read_rsa_key(PriKeyFile).
+
+enc(PlainText) ->
+    public_key:encrypt_public(PlainText, rsa_public_key()).
+
+dec(CipherText)->
+    public_key:decrypt_private(CipherText, rsa_private_key()).
+
+test(Msg) ->
+    CipherText = enc(Msg),
+	Base64 = base64:encode_to_string(CipherText),
+    ?LOG({encode, Msg, CipherText, Base64}),
+    PlainText = dec(CipherText),
+    ?LOG({decode, PlainText, glib:to_binary(base64:decode_to_string(Base64))}).
+
+
+% private functions
+root_dir() ->
+	replace(os:cmd("pwd"), "\n", "/"). 
+
+replace(Str, SubStr, NewStr) ->
+	case string:str(Str, SubStr) of
+		Pos when Pos == 0 ->
+			Str;
+		Pos when Pos == 1 ->
+			Tail = string:substr(Str, string:len(SubStr) + 1),
+			string:concat(NewStr, replace(Tail, SubStr, NewStr));
+		Pos ->
+			Head = string:substr(Str, 1, Pos - 1),
+			Tail = string:substr(Str, Pos + string:len(SubStr)),
+			string:concat(string:concat(Head, NewStr), replace(Tail, SubStr, NewStr))
+	end.
