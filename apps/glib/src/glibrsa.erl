@@ -9,11 +9,11 @@ read_rsa_key(FileName) ->
     public_key:pem_entry_decode(Entry).
 
 rsa_public_key() ->
-	PubKeyFile = root_dir() ++ "config/publickey.key",
+	PubKeyFile = glib:root_dir() ++ "config/publickey.key",
     read_rsa_key(PubKeyFile).
 
 rsa_private_key() ->
-	PriKeyFile = root_dir() ++ "config/privatekey.key",
+	PriKeyFile = glib:root_dir() ++ "config/privatekey.key",
     read_rsa_key(PriKeyFile).
 
 encode(Str) ->
@@ -37,21 +37,7 @@ test(Msg) ->
 
 
 % private functions
-root_dir() ->
-	replace(os:cmd("pwd"), "\n", "/"). 
 
-replace(Str, SubStr, NewStr) ->
-	case string:str(Str, SubStr) of
-		Pos when Pos == 0 ->
-			Str;
-		Pos when Pos == 1 ->
-			Tail = string:substr(Str, string:len(SubStr) + 1),
-			string:concat(NewStr, replace(Tail, SubStr, NewStr));
-		Pos ->
-			Head = string:substr(Str, 1, Pos - 1),
-			Tail = string:substr(Str, Pos + string:len(SubStr)),
-			string:concat(string:concat(Head, NewStr), replace(Tail, SubStr, NewStr))
-	end.
 
 
 
