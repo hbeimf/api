@@ -7,7 +7,10 @@
 
 % 注意： Key, IVec, PlainText 必须都为128比特，也就是16字节
 test() -> 
-	Str = <<"abcdefgasdfghjkd">>,
+	% Str = <<"abcdefgasdfghjkd">>,
+	%Str = <<"abcdefgasdfghjkdabcdefgasdfghjkd">>,
+	Str = <<"hello">>,
+
 	test(Str).
 test(Str) ->
 	Bin = encode(Str),
@@ -18,10 +21,20 @@ test(Str) ->
 
 
 encode(Str) ->
-	CipherText = crypto:block_encrypt(type(), key(), ivec(), Str).
+	%% 按AES规则，补位
+	N = 128 - (byte_size(glib:to_binary(Str)) rem 128),
+	Str2 = lists:append(glib:to_str(Str), get_padding(N)),
+
+	CipherText = crypto:block_encrypt(type(), key(), ivec(), Str2).
 
 decode(Bin) ->
-	crypto:block_decrypt(type(), key(), ivec(), Bin).
+	PlainAndPadding = crypto:block_decrypt(type(), key(), ivec(), Bin),
+
+	<<PosLen/integer>> = binary_part(PlainAndPadding,{size(PlainAndPadding),-1}),
+	Len = byte_size(PlainAndPadding) - PosLen,
+	<<PlainText:Len/binary, _:PosLen/binary>> = PlainAndPadding,
+	PlainText.
+
 
 ivec() -> 
 	<<0:128>>.
@@ -31,3 +44,17 @@ type() ->
 
 key() -> 
 	<<"asdfghkl;'][poi?">>.
+
+
+get_padding(N) ->
+    case N of
+        0 ->
+            get_padding2(128, 128, []);
+        Num ->
+            get_padding2(Num,Num,[])
+    end.
+    
+get_padding2(N, Val, PaddingList) when N > 0 ->
+    get_padding2(N-1, Val, [Val] ++ PaddingList);
+get_padding2(N, _Val,PaddingList) when N == 0 ->
+    PaddingList.
