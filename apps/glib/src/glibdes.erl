@@ -9,7 +9,7 @@
 -include_lib("webs/include/log.hrl").
 
 test() -> 
-	Str = "this is a test!!!",
+	Str = <<"this is a test!!!">>,
 	{ok, Bin} = encode(Str),
 	?LOG({encode, Bin}),
 	R = decode(Bin),
@@ -36,7 +36,7 @@ encode(PlainText, Key, Charset) ->
 
     %% 按DES规则，补位
     N = 8 - (byte_size(glib:to_binary(PlainText)) rem 8),
-    PlainText2 = lists:append(PlainText, get_padding(N)),
+    PlainText2 = lists:append(glib:to_str(PlainText), get_padding(N)),
     %% 加密
     Ciphertext = crypto:block_encrypt(des_cbc, Key2, Ivec, PlainText2),
     {ok, Ciphertext}.
