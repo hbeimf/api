@@ -25,9 +25,11 @@ encode(Str) ->
 	N = 128 - (byte_size(glib:to_binary(Str)) rem 128),
 	Str2 = lists:append(glib:to_str(Str), get_padding(N)),
 
-	CipherText = crypto:block_encrypt(type(), key(), ivec(), Str2).
+	CipherText = crypto:block_encrypt(type(), key(), ivec(), Str2),
+	base64:encode_to_string(CipherText).
 
-decode(Bin) ->
+decode(Base64) ->
+	Bin = base64:decode(Base64),
 	PlainAndPadding = crypto:block_decrypt(type(), key(), ivec(), Bin),
 
 	<<PosLen/integer>> = binary_part(PlainAndPadding,{size(PlainAndPadding),-1}),
