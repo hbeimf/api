@@ -1,6 +1,6 @@
 -module(glibaes).
 % -compile(export_all).
--export([encode/1, decode/1, test/0, test/1]).
+-export([encode/1, decode/1, test/0, test/1, key/0]).
 -include_lib("webs/include/log.hrl").
 
 % application:start(crypto).
@@ -44,8 +44,13 @@ ivec() ->
 type() -> 
 	aes_cbc128.
 
-key() -> 
-	<<"asdfghkl;'][poi?">>.
+% key() -> 
+% 	<<"asdfghkl;'][poi?">>.
+
+key() ->
+	Str = <<"anykeyisokherethisis a test key">>,
+	<<Key:16/binary, _/binary>>= glib:to_binary(glib:md5(Str)),
+	Key.
 
 
 get_padding(N) ->
