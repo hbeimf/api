@@ -5,11 +5,10 @@ import (
 )
 
 type ControllerCall interface {
-    Excute(message etf.Tuple) (*etf.Term)
+    Excute(message etf.Tuple) *etf.Term
 }
 
 var callRouters map[string]interface{}
-
 
 func init() {
     // 定义一个key/value list , 用来存放同步调用的控制器
@@ -27,9 +26,7 @@ func setCallRouter() {
     // gen_server:call(GoMBox, {str, str_replace, StrRes, FindStr, ReplaceTo}).
     addRouterCall("str", &StrController{})
     addRouterCall("time", &TimeController{})
-    addRouterCall("db", &DbController{})
-
-
+    // addRouterCall("db", &DbController{})
 
     addRouterCall("default", &DefaultController{})
 }
@@ -52,5 +49,3 @@ func HasCallController(key string) bool {
     }
     return false
 }
-
-
