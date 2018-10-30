@@ -35,6 +35,12 @@ run:
 test:
 	cd ./client_test/wsc && rebar3 shell
 
+show:
+	ps aux | grep gonode
+
+stop:
+	killall xgn.node
+
 # 请先修改app的版本号再执行make up 
 up:
 	./rebar3 release
