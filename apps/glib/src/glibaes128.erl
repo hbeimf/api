@@ -1,7 +1,6 @@
--module(glibaes256).
+-module(glibaes128).
 -compile(export_all).
 % -export([encode/1, decode/1, test/0, test/1, key/0]).
-
 -include_lib("webs/include/log.hrl").
 
 % application:start(crypto).
@@ -23,7 +22,7 @@ test(Str) ->
 
 encode(Str) ->
 	%% 按AES规则，补位
-	N = 256 - (byte_size(glib:to_binary(Str)) rem 256),
+	N = 128 - (byte_size(glib:to_binary(Str)) rem 128),
 	Str2 = lists:append(glib:to_str(Str), get_padding(N)),
 
 	CipherText = crypto:block_encrypt(type(), key(), ivec(), Str2),
@@ -40,24 +39,25 @@ decode(Base64) ->
 
 
 ivec() -> 
-	<<0:128>>.
+	<<"1234567890123412">>.
 
 type() -> 
-	aes_cbc256.
+	aes_cbc128.
 
 % key() -> 
 % 	<<"asdfghkl;'][poi?">>.
 
 key() ->
-	Str = <<"anykeyisokherethisis a test key">>,
-	<<Key:16/binary, _/binary>>= glib:to_binary(glib:md5(Str)),
-	Key.
+	<<"201707eggplant99">>.
+	% Str = <<"anykeyisokherethisis a test key">>,
+	% <<Key:16/binary, _/binary>>= glib:to_binary(glib:md5(Str)),
+	% Key.
 
 
 get_padding(N) ->
     case N of
         0 ->
-            get_padding2(256, 256, []);
+            get_padding2(128, 128, []);
         Num ->
             get_padding2(Num,Num,[])
     end.
@@ -66,34 +66,3 @@ get_padding2(N, Val, PaddingList) when N > 0 ->
     get_padding2(N-1, Val, [Val] ++ PaddingList);
 get_padding2(N, _Val,PaddingList) when N == 0 ->
     PaddingList.
-
-
-% glibaes256:t().
-t() ->
-	Encode = <<"U2FsdGVkX19H3vLvW5sOyZQ1RRUsGMTBDdcLYyX+0hs=">>,
-	<<Salted:8/binary, Salt:8/binary, Encrypted/binary>> = base64:decode(Encode),
-	?LOG({Salted, Salt, Encrypted}),
-
-	{Key, Iv} = get_key_iv(<<"PASSWORD">>, Salt),
-	
-	PlainAndPadding = crypto:block_decrypt(type(), Key, Iv, Encrypted),
-	?LOG({PlainAndPadding, byte_size(PlainAndPadding)}),
-	ok.
-
-get_key_iv(Password, Salt) -> 
-	?LOG({Password, Salt}),
-	<<Key:32/binary, Iv:16/binary, _/binary>> = get_key_iv(Password, Salt, <<"">>, <<"">>),
-	{Key, Iv}.
-
-get_key_iv(Password, Salt, Salted, Dx) ->
-	Dx1 = glib:to_binary(glib:md5(<<Dx/binary, Password/binary, Salt/binary>>)),
-	case erlang:byte_size(Salted) < 48 of 
-		true ->
-			get_key_iv(Password, Salt, <<Salted/binary, Dx1/binary>>, Dx1);
-		_ ->
-			Salted
-	end.
-	
-	
-
-
