@@ -21,6 +21,7 @@ func setCallRouter() {
     addRouterCall("list", &ListController{})
     addRouterCall("curl", &CurlController{})
     addRouterCall("iconv", &IconvController{})
+    addRouterCall("aes", &Aes256Controller{})
 
     // erlang 调用示例:
     // gen_server:call(GoMBox, {str, str_replace, StrRes, FindStr, ReplaceTo}).

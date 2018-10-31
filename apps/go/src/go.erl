@@ -33,6 +33,18 @@ loop() ->
 %% Call Api functions
 %% 同步消息发送
 %%====================================================================
+aes() ->
+    Str = "hello world",
+    Key = "keys123456",
+    {ok, Encode} = aes_encode(Str, Key),
+    aes_decode(Encode, Key).
+aes_encode(Str, Key) ->
+    Call = {aes, encode, Str, Key},
+    call(Call).
+aes_decode(Encode, Key) ->
+    Call = {aes, decode, Encode, Key},
+    call(Call).
+
 
 % 返回时间截
 time() ->
