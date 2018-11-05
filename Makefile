@@ -1,7 +1,7 @@
 PROJECT := release_api
 NODENAME := api
 VERSION := 0.1.0
-
+Pid := $(shell cat ./apps/go/priv/go.pid)
 
 all: release test_release
 	
@@ -29,7 +29,7 @@ clean:
 	rm -rf ./bin/api.master.test.tar.gz
 	rm -rf ./bin/api.master.release.tar.gz
 
-run:
+run: stop
 	rebar3 shell --name $(NODENAME)@127.0.0.1 --setcookie $(NODENAME)_cookie 
 
 test:
@@ -39,8 +39,12 @@ show:
 	ps aux | grep gonode
 
 stop:
-	killall xgn.node
+	ps -efww|grep xgn.node|grep -v grep|cut -c 9-15|xargs kill -9
 
+# kill -9 $(Pid)
+# killall -q xgn.node
+
+	
 # 请先修改app的版本号再执行make up 
 up:
 	./rebar3 release
