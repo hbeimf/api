@@ -7,7 +7,6 @@
    [kernel,
     stdlib,
     glib,
-    zip_helper,
     go,
     webs 
    ]},
