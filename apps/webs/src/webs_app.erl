@@ -19,17 +19,7 @@ start(_StartType, _StartArgs) ->
 		{'_', [
 			{"/login", handler_login, []},
 			{"/api/admin/refresh_token", handler_refresh_token, []},
-			{"/websocket", handler_ws, []},
-			% {"/api/admin/hello", handler_hello, []},
-			{"/api/test", handler_test, []},
-			{"/api/activate", handler_activate, []},
-			{"/api/login", handler_login, []},
-			{"/api/modifyPasswd", handler_modify_password, []},
-			{"/api/curriculumList", handler_curriculum_list, []},
-			{"/api/curriculumInfo", handler_curriculum_info, []},
-			{"/api/studentList", handler_student_list, []},
-			{"/api/calssList", handler_class_list, []},
-			{"/api/accountInfo", handler_account_info, []}
+			{"/websocket", handler_ws, []}
 		]}
 	]),
 
